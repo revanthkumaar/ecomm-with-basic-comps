@@ -3,11 +3,14 @@ import { Switch, Route } from 'react-router-dom';
 
 import './App.css';
 
+import {createStructuredSelector} from 'reselect'
+
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component.jsx';
 import Header from './components/header/header.component.jsx';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import store from './redux/store';
 
 
 function App() {
@@ -50,4 +53,15 @@ function App() {
   );
 }
 
-export default App;
+
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
+})
+
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+});
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);
+
