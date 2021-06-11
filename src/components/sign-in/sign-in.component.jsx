@@ -2,40 +2,43 @@ import React from 'react';
 
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
-import { render } from 'node-sass';
-import {auth,signInWithGoogle} from '../../firebase/firebase.utils'
 
+import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
 
-class SignIn extends React.Component{
+import './sign-in.styles.scss';
 
-    constructor(props);
+class SignIn extends React.Component {
+  constructor(props) {
     super(props);
+
     this.state = {
-        email:'',
-        password:''
+      email: '',
+      password: ''
+    };
+  }
+
+  handleSubmit = async event => {
+    event.preventDefault();
+
+    const { email, password } = this.state;
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      this.setState({ email: '', password: '' });
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    handleSubmit = async event => {
-        const {email,password} = state;
+  handleChange = event => {
+    const { value, name } = event.target;
 
-        try{
-            await auth.signInWithEmailAndPassword(email,password); //aysnc 
-        }
-        catch(error){
-            console.log(error)
-        }
+    this.setState({ [name]: value });
+  };
 
-    }
-
-
-
-
-
-    render(){
-
+  render() {
     return (
-
-        <div className='sign-in'>
+      <div className='sign-in'>
         <h2>I already have an account</h2>
         <span>Sign in with your email and password</span>
 
@@ -64,12 +67,8 @@ class SignIn extends React.Component{
           </div>
         </form>
       </div>
-
-    )
-
-    
-
-
+    );
+  }
 }
 
 export default SignIn;
